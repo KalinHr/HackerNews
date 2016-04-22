@@ -10,6 +10,7 @@ import com.example.kalinhristov.get.models.Story;
 public class MainActivity extends AppCompatActivity implements MyOnClickListener {
 
     private boolean isTwoPane = false;
+    private MainFragment mainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,9 +18,19 @@ public class MainActivity extends AppCompatActivity implements MyOnClickListener
         setContentView(R.layout.main_activity);
         determinePaneLayout();
 
-        MainFragment mainFragment =
-                (MainFragment) getFragmentManager().findFragmentById(R.id.mainFragment);
+        mainFragment = (MainFragment) getFragmentManager().findFragmentById(R.id.mainFragment);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         mainFragment.setListener(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mainFragment.setListener(null);
     }
 
     private void determinePaneLayout() {
