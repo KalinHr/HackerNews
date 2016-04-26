@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.kalinhristov.get.API.IStory;
 import com.example.kalinhristov.get.API.ITopStories;
-import com.example.kalinhristov.get.listeners.MyOnClickListener;
+import com.example.kalinhristov.get.listeners.OnCommentClick;
+import com.example.kalinhristov.get.listeners.OnViewClick;
 import com.example.kalinhristov.get.models.Story;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,7 +29,8 @@ public class MainFragment extends Fragment {
     public static final String TOP_STORIES_URL = "https://hacker-news.firebaseio.com/v0/";
     public int counter = 0;
     private View fRootView;
-    private MyOnClickListener listener;
+    private OnViewClick onViewClickListener;
+    private OnCommentClick onCommentClickListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,15 +73,17 @@ public class MainFragment extends Fragment {
                 .build();
         IStory iStory = retrofitStory.create(IStory.class);
 
-        for (int i = 0; i < storyIds.size(); i++) {
-            Call<Story> call = iStory.getStory(storyIds.get(i).toString());
+        final List<Integer> sampleStories = storyIds.subList(0, 20);
+
+        for (int i = 0; i < sampleStories.size(); i++) {
+            Call<Story> call = iStory.getStory(sampleStories.get(i).toString());
             call.enqueue(new Callback<Story>() {
                 @Override
                 public void onResponse(Call<Story> call, Response<Story> response) {
                     stories.add(response.body());
                     counter++;
 
-                    if (counter == storyIds.size()) {
+                    if (counter == sampleStories.size()) {
                         printClickableListOfStories(stories);
                     }
                 }
@@ -96,23 +99,32 @@ public class MainFragment extends Fragment {
     private void printClickableListOfStories(List<Story> stories) {
         final ListView listView = (ListView) fRootView.findViewById(R.id.listView);
 
+
         if (listView != null) {
-            listView.setAdapter(new StoryAdapter
+            listView.setAdapter(new MainAdapter
                     (fRootView.getContext(),
                             android.R.layout.simple_list_item_1,
-                            stories));
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                    Story story = (Story) listView.getItemAtPosition(position);
-                    listener.onClickListener(story);
-                }
-            });
-
+                            stories,
+                            new OnCommentClick() {
+                                @Override
+                                public void onCommentClick(Story story) {
+                                    onCommentClickListener.onCommentClick(story);
+                                }
+                            },
+                            new OnViewClick() {
+                                @Override
+                                public void onViewClick(Story story) {
+                                    onViewClickListener.onViewClick(story);
+                                }
+                            }));
         }
     }
 
-    public void setListener(MyOnClickListener listener) {
-        this.listener = listener;
+    public void setCommentListener(OnCommentClick listener) {
+        this.onCommentClickListener = listener;
+    }
+
+    public void setViewListener(OnViewClick listener) {
+        this.onViewClickListener = listener;
     }
 }

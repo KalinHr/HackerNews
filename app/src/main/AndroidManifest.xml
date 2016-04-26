@@ -17,5 +17,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".StoryActivity"></activity>
+        <activity android:name=".CommentActivity"></activity>
     </application>
 </manifest>

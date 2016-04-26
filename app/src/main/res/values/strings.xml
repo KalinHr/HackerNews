@@ -1,4 +1,3 @@
 <resources>
-    <string name="app_name">Get</string>
-    <color name="lgreen">#00AA00</color>
+    <string name="app_name">Hacker News</string>
 </resources>

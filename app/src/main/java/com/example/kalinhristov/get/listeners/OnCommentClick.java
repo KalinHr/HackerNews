@@ -1,7 +1,7 @@
 package com.example.kalinhristov.get.listeners;
 
-/**
- * Created by Kalin Hristov on 25.4.2016 г..
- */
+import com.example.kalinhristov.get.models.Story;
+
 public interface OnCommentClick {
+    void onCommentClick(Story story);
 }

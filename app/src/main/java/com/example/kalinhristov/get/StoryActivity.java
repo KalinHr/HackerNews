@@ -11,14 +11,14 @@ public class StoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.story);
+        setContentView(R.layout.fragment_activity);
 
         Intent intent = getIntent();
-        Story story = intent.getParcelableExtra("story");
+        Story story = intent.getParcelableExtra("fragment_activity");
 
             StoryFragment storyFragment = StoryFragment.newInstance(story);
             getFragmentManager().beginTransaction()
-                    .replace(R.id.storyFragment, storyFragment)
+                    .replace(R.id.fragment, storyFragment)
                     .commit();
     }
 }

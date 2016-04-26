@@ -8,5 +8,5 @@ import retrofit2.http.Path;
 
 public interface IComments {
     @GET("{id}.json?print=pretty")
-    Call<Comment> getComment(@Path("id") String id);
+    Call<Comment> getComments(@Path("id") String id);
 }
